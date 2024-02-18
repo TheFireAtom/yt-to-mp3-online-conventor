@@ -65,13 +65,15 @@ function App() {
           const mobileLink = "youtu.be";
           if (link.contains(pcLink)) {
             const text = link.split("=")[1];
+            if (text) {
+              setId(text);
+            }
           } else if ((link.contains(mobileLink))) {
             const temp = link.split("/");
             const text = temp[3].split("?")[1];
-          }
-
-          if (text) {
-            setId(text)
+            if (text) {
+              setId(text);
+            }
           }
         }}
         disabled={disabled}
