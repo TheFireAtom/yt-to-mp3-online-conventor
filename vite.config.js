@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/yt-to-mp3-online-conventor/"
+  base: "https://thefireatom.github.io/yt-to-mp3-online-conventor/"
 })
