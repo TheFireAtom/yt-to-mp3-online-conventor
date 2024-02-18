@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import React, { useState } from "react";
+// import YouTubeToMP3Converter from "./YouTubeToMP3Converter.jsx"
+import './App.css';
+import "./index.css"
+
+import { useEffect, useState } from 'react';
+import { fetch } from './services/ApiRequest';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [link, setLink] = useState('');
+  const [id, setId] = useState(null);
+  const [response, setResponse] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  
+  useEffect(() => {
+    if (id) {
+      const fetchData = () => {
+        let interval = setInterval(async function() {
+          setDisabled(true);
+          const res = await fetch(id);
+          
+          if (res.status === 200 && res.data.status === "ok") {
+            setDisabled(false);
+            setResponse(res.data);
+            clearInterval(interval);
+          } else if (res.status === 200 && res.data.status === "fail") {
+            alert("Invalid video ID");
+            setDisabled(false);
+            clearInterval(interval);
+          }
+
+        }, 1000);
+      }
+
+      fetchData();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (response) {
+      window.location.href = response.link;
+    }
+  }, [response]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="App">
+      <div id="logo">
+        <h1>MP3 DOWNLOADER</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <form>
+        <input
+          type="text"
+          placeholder="YouTube link here"
+          value={link}
+          onChange={(e) => {
+            setLink(e.target.value);
+          }}
+        />
+      </form>
+      <span>It might take a moment to convert your video</span>
+      <button
+        onClick={() => {
+          const text = link.split("=")[1];
+          if (text) {
+            setId(text);
+          }
+        }}
+        disabled={disabled}
+        className={disabled ? "button-disabled" : ""}
+      >Download</button>
+    </div>
   )
 }
 
-export default App
+export default App;
+
+// function App() {
+//   return (
+//     <div className='App'>
+//         <h1>Youtube to mp3 conventor</h1>
+//         <YouTubeToMP3Converter/>
+//     </div>
+//   );
+// }
+
+// export default App;
