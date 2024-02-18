@@ -63,14 +63,14 @@ function App() {
         onClick={() => {
           const pcLink = "youtube";
           const mobileLink = "youtu.be";
-          if (link.contains(pcLink)) {
+          if (link.includes(pcLink)) {
             const text = link.split("=")[1];
             if (text) {
               setId(text);
             }
-          } else if ((link.contains(mobileLink))) {
+          } else if ((link.includes(mobileLink))) {
             const temp = link.split("/");
-            const text = temp[3].split("?")[1];
+            const text = temp[3].split("?")[0];
             if (text) {
               setId(text);
             }
