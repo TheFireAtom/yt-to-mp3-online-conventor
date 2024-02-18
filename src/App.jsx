@@ -61,9 +61,17 @@ function App() {
       <span>It might take a moment to convert your video</span>
       <button
         onClick={() => {
-          const text = link.split("=")[1];
+          const pcLink = "youtube";
+          const mobileLink = "youtu.be";
+          if (link.contains(pcLink)) {
+            const text = link.split("=")[1];
+          } else if ((link.contains(mobileLink))) {
+            const temp = link.split("/");
+            const text = temp[3].split("?")[1];
+          }
+
           if (text) {
-            setId(text);
+            setId(text)
           }
         }}
         disabled={disabled}
